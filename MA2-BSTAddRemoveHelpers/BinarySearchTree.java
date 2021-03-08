@@ -84,13 +84,27 @@ public class BinarySearchTree<T extends Comparable<T>> extends Collection<T> {
 	{
 		// Pseudo code:
 		//  Check for null first
-		//  If null, create new node return pointer to that node		
-		
+		//  If null, create new node return pointer to that node	
 		//  If not null, compare value, add to correct place
 		//  You can choose whether to use recursion or not to compare, use this
 		//   method of the item: item.compareTo(/*arguments to compare to*/)
 		//	 We can know the item is of a Comparable type so it *must* have a
-		//   compareTo() iterface
+		//   compareTo() interface
+		if (root == null) {
+			
+			_size_counter ++; //track the size
+			
+			return new BinaryNode<T>(item); //return pointer to new node if null
+			
+		}else if (root.getValue().compareTo(item) < 0) {  //if the item value > root value, add to the right subtree
+			
+			root._right_child = addElementHelper(root._right_child,item); //use recursion add the item to the appropriate place
+			
+		}else if (root.getValue().compareTo(item) > 0) { //if the item value < root value, add to the left subtree
+			root._left_child= addElementHelper(root._left_child,item); //use recursion add the item to the appropriate place
+		}
+
+		
 
 		// MA TODO
 
@@ -103,7 +117,9 @@ public class BinarySearchTree<T extends Comparable<T>> extends Collection<T> {
 	protected BinaryNode<T> removeElementHelper(BinaryNode<T> root, T item)
 	{
 		// Recursion base case - empty tree, return
-		if (root == null) { return root; }
+		if (root == null) { 
+			return root; 
+			}
 		
 		// Pseudo code:
 		//  Three possibilities:
@@ -114,12 +130,27 @@ public class BinarySearchTree<T extends Comparable<T>> extends Collection<T> {
 		{
 			// Increment removal counter
 			_remove_counter++;
-			
-			// We found the item, so do we remove from the left or right?
+		
 			if (_remove_counter % 2 == 0)
 			{
 				// Let's assume we are removing from the left when it's an even number
 				// MA TODO
+				
+				//reference from "Data Structures and Algorithm Analysis in Java 3rd", Chapter 4.3.4 Remove
+				if (root._left_child != null && root._right_child != null) { // two children
+					
+					BinaryNode<T> left_max = findLargest(root._left_child); // find the leftmost element of the root if _remove_counter is even
+					
+					root.setValue(left_max.getValue()); //set the root value to the left max
+					
+					root._left_child = removeElementHelper(root._left_child, left_max.getValue()); //removing from left recursively
+					
+				}
+				else {
+					root = (root._left_child != null) ? root._left_child : root._right_child;
+					_remove_counter--; // track the _remove_counter variable
+				}
+				
 
 			}
 			else
@@ -127,15 +158,26 @@ public class BinarySearchTree<T extends Comparable<T>> extends Collection<T> {
 				// Remove from the right subtree when it's an odd number
 				// MA TODO
 
+				if (root._left_child != null && root._right_child != null) { // two children
+					
+					BinaryNode<T> right_min = findSmallest(root._right_child); // find the rightmost of the root if the _remove_counter is odd
+					
+					root.setValue(right_min.getValue()); // set the removed root
+					
+					root._right_child = removeElementHelper(root._right_child, right_min.getValue()); // removing from right recursively
+					
+				}
+				else {
+					root = (root._left_child != null) ? root._left_child : root._right_child;
+					_remove_counter--; // track the _remove_counter variable
+				}
+
 			}
 		}
 		else if (item.compareTo(root.getValue()) < 0)
 		{
 			// Item is less than root - go on finding it in the left subtree
-			BinaryNode<T> result = removeElementHelper(
-					root.getLeftChild(),
-					item
-					);
+			BinaryNode<T> result = removeElementHelper(root.getLeftChild(),item);
 			
 			// The recursive call *might* have altered our
 			//  left child's structure. Inform root of this change
@@ -145,10 +187,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends Collection<T> {
 		{
 			// Item is greater than root
 			//  finding it in the right subtree
-			BinaryNode<T> result = removeElementHelper(
-					root.getRightChild(),
-					item
-					);
+			BinaryNode<T> result = removeElementHelper(root.getRightChild(),item);
 			root.setRightChild(result);
 		}
 		
