@@ -28,16 +28,21 @@ public class AvlTree<T extends Comparable<T>> extends Collection<T>
 		// Check for null roots
 		if (root == null)
 			return root;
-
-		// Remove this return and replace with the rotate algorithm
-		return root;
-		
 		// New root comes from left side
 		// Reassign right child to new root's left child
 		// Recalculate root's height as it has probably changed
 		// With that done, we can now reassign old root to new root
 		// And perform additional balances as necessary
 		// Return the new root
+		
+		AvlNode<T> currentRoot = root;
+		AvlNode<T> newRoot = currentRoot.getLeftChild();
+		currentRoot.setLeftChild(newRoot.getRightChild());
+		newRoot.setRightChild(currentRoot);
+		
+		// Remove this return and replace with the rotate algorithm
+		return newRoot;
+		
 	}
 
 	// MA TODO: Implement me SECOND!
@@ -46,8 +51,7 @@ public class AvlTree<T extends Comparable<T>> extends Collection<T>
 		// Check for null roots
 		if (root == null)
 			return root;
-
-		return root;
+		
 		
 		// New root comes from right side
 		// Reassign right child to new root's left child
@@ -55,6 +59,17 @@ public class AvlTree<T extends Comparable<T>> extends Collection<T>
 		// With that done, we can now reassign old root to new root
 		// And perform additional balances as necessary
 		// return the new root
+		
+		AvlNode<T> currentRoot = root;
+		AvlNode<T>  newRoot = currentRoot.getRightChild();
+		currentRoot.setRightChild(newRoot.getLeftChild());
+		newRoot.setLeftChild(currentRoot);
+		
+		
+		
+		return newRoot;
+
+		
 	}
 	
 	// MA TODO: Implement me THIRD!
@@ -70,12 +85,38 @@ public class AvlTree<T extends Comparable<T>> extends Collection<T>
 		// MA TODO implement before this return statement!
 		//  If you find an imbalance, you will need to either
 		//  return the result of rotateLeft or rotateRight
+		
 
 		// Calculate balance status
 		// If imblanced, check for the four AVL tree cases
 		// Rotate as required, which returns a new root pointer
 		// Set new height on new root
 		// Return updated root
+		
+		//use getBalance Factor method for the height of left sub tree - right sub tree > 1
+		if (root.getBalanceFactor() * -1 > 1) {
+			if (root.getLeftChild().getBalanceFactor() > 0) {
+				root.setLeftChild(rotateLeft(root.getLeftChild()));
+				root = rotateRight(root);
+			}
+			else {
+				root = rotateRight(root);
+			}
+		}
+		
+		//use getBalance Factor method for the height of right sub tree - left sub tree > 1
+		else if (root.getBalanceFactor() > 1) {
+			if (root.getRightChild().getBalanceFactor() * -1 > 0) {
+				root.setRightChild(rotateRight(root.getRightChild()));
+				root = (rotateLeft(root));
+			}
+			else {
+				root = (rotateLeft(root));
+			}
+		}
+		
+		
+
 		
 		return root;
 	}
