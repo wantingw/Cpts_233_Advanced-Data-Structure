@@ -11,7 +11,6 @@
  */
 
 import java.util.ArrayList;
-import java.lang.IndexOutOfBoundsException;
 
 public class BinaryHeap<AnyType extends Comparable<? super AnyType>>
 {
@@ -103,10 +102,87 @@ public class BinaryHeap<AnyType extends Comparable<? super AnyType>>
     // ********************************************************************* //
     public void insert(AnyType x) {
         // MA TODO: Write some kind of heap/percolate insert function
+    	
+    	// Dynamically expand the heap size to avoid index out of bounds
+    	if (currentSize == data.size() - 1) {
+    		ensureHeapSize(data.size() * 2 + 1);
+    	}
+    	
+    	
+    	// Percolate up
+    	int hole = currentSize;
+    	
+    	// Insert the element X, create a hole in the (next) available location
+    	// The parent index: (hole - 1) / 2
+    	for (data.set(currentSize, x); x.compareTo(data.get((hole-1)/2)) < 0; hole = (hole - 1) / 2) {
+    		
+    		// Store the parent element
+    		AnyType a = data.get((hole - 1) / 2);
+    		
+    		// Perform repeated swaps until the correct order was established
+    		data.set((hole - 1)/2, x);
+    		data.set(hole, a);
+    		
+    		
+    		
+
+    	}
+    	// Size updates
+    	currentSize++;
     }
 
-    private void percolateDown( int hole )
-    {
-        // MA TODO: Write some kind of heap/percolateUp function
-    }
+	private void percolateDown(int hole) {
+		// MA TODO: Write some kind of heap/percolateUp function
+
+		int child;
+
+		// Stored the root element
+		AnyType tmp = data.get(hole);
+
+		for (; hole * 2 <= currentSize; hole = child) {
+
+			// Track child index
+			child = hole * 2 + 1;
+
+			// Case 1: if both left and right children are null, then stop
+			if (data.get(child) == null && data.get(child + 1) == null) {
+				break;
+			}
+
+			// Case 2: if right child is null but left child is not null
+			// compare the child index element to the root element, then swap or stop
+			if (data.get(child) != null && data.get(child + 1) == null) {
+				if (data.get(child).compareTo(tmp) < 0) {
+					AnyType childElement = data.get(child);
+					data.set(child, tmp);
+					data.set(hole, childElement);
+				} else
+					break;
+			}
+
+			// Case 3: if right & left children are not null
+			// compare these two children, obtain the smaller element
+			// compare the smaller element with the root element, then swap or stop
+			if (data.get(child) != null && data.get(child + 1) != null) {
+
+				if (child != currentSize && data.get(child + 1).compareTo(data.get(child)) < 0)
+					child++;
+
+				if (data.get(child).compareTo(tmp) < 0) {
+
+					AnyType childElement = data.get(child);
+					data.set(child, tmp);
+					data.set(hole, childElement);
+
+				} else
+					break;
+
+			}
+		}
+
+		data.set(hole, tmp);
+
+	}
+    
+   
 }
