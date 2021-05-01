@@ -17,9 +17,8 @@ public class QuickSort<T extends Comparable<T>> extends Sorter<T> {
     }
 
   	public ArrayList<T> sort(SortStats stats, ArrayList<T> data) {
-  		if(data.size()<=1) {
-  			return data;
-  		}else {
+  		if(data.size()>1) {
+  			
   			ArrayList<T> small = new ArrayList<T>();
   			ArrayList<T> large = new ArrayList<T>();
   			int mid = data.size()/2;
@@ -58,12 +57,14 @@ public class QuickSort<T extends Comparable<T>> extends Sorter<T> {
   				data.add(left);
   			}
   			data.add(pivot);
+  			
   			for(T right : large ) {
   				data.add(right);
   			}
   			
-  			return data;
+  			
   		}
+  		return data;
   		
   	}
 
