@@ -67,7 +67,7 @@ public class QuickSort<T extends Comparable<T>> extends Sorter<T> {
         ArrayList<T> result = new ArrayList<T>();
         ArrayList<T> smallPart = sort(stats,small);
         ArrayList<T> largePart = sort(stats,large);
-        
+        result.clear();
         result.addAll(smallPart);
         result.add(pivot);
         result.addAll(largePart);
@@ -76,9 +76,5 @@ public class QuickSort<T extends Comparable<T>> extends Sorter<T> {
       }
       
     }
-    
-  
-    
-  
 
 }
