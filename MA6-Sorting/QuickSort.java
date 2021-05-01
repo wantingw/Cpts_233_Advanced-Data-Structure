@@ -17,25 +17,34 @@ public class QuickSort<T extends Comparable<T>> extends Sorter<T> {
     }
 
     public ArrayList<T> sort(SortStats stats, ArrayList<T> data) {
-      quickSort(stats,data);
+      if(data.size()>1) {
+        ArrayList<T> datas = quickSort(stats,data);
+          data.clear();
+          data.addAll(datas);
+      }
       return data;
+      
     }
     
     
     private ArrayList<T> quickSort(SortStats stats, ArrayList<T> data){
-      if(data.size()>1) {
+      if(data.size() <= 1) {
+        
+        return data;
+        
+      }else {
         //sublist small for elements smaller than pivot
         //sublist large for elements larger than pivot
-        ArrayList<T> small = new ArrayList<>();
-        ArrayList<T> large = new ArrayList<>();
+        ArrayList<T> small = new ArrayList<T>();
+        ArrayList<T> large = new ArrayList<T>();
         
-        int m = data.size()/2;
+        int mid = data.size() / 2;
         
         //pick median as a pivot
-        T pivot = data.get(m);
+        T pivot = data.get(mid);
         for(int i = 0; i<data.size(); i++) {
           //if not reaching to the median index
-          if(i!=m) {
+          if(i!=mid) {
           T val  = data.get(i);
           
             //elements to the left of pivot
@@ -55,23 +64,21 @@ public class QuickSort<T extends Comparable<T>> extends Sorter<T> {
             }
           }
         }
-        
+        ArrayList<T> result = new ArrayList<T>();
         ArrayList<T> smallPart = sort(stats,small);
         ArrayList<T> largePart = sort(stats,large);
         
-        //set the DATA list
-        setData(data, smallPart, pivot, largePart);
-
+        result.addAll(smallPart);
+        result.add(pivot);
+        result.addAll(largePart);
+        
+        return result;
       }
-      return data;
       
     }
     
-    private void setData(ArrayList<T> data ,ArrayList<T>small, T pivot, ArrayList<T> large) {
-      data.clear();
-      data.addAll(small);
-      data.add(pivot);
-      data.addAll(large);
-    }
+  
+    
+  
 
 }
