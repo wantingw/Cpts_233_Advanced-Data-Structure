@@ -17,29 +17,12 @@ public class QuickSort<T extends Comparable<T>> extends Sorter<T> {
     }
 
     public ArrayList<T> sort(SortStats stats, ArrayList<T> data) {
-      if(data.size()>1) {
-        ArrayList<T> datas = quickSort(stats,data);
-          data.clear();
-          data.addAll(datas);
-      }
-      return data;
-      
-    }
-    
-    
-    private ArrayList<T> quickSort(SortStats stats, ArrayList<T> data){
-      if(data.size() <= 1) {
-        
+      if(data.size()<=1) {
         return data;
-        
       }else {
-        //sublist small for elements smaller than pivot
-        //sublist large for elements larger than pivot
         ArrayList<T> small = new ArrayList<T>();
         ArrayList<T> large = new ArrayList<T>();
-        
-        int mid = data.size() / 2;
-        
+        int mid = data.size()/2;
         //pick median as a pivot
         T pivot = data.get(mid);
         for(int i = 0; i<data.size(); i++) {
@@ -48,6 +31,7 @@ public class QuickSort<T extends Comparable<T>> extends Sorter<T> {
           T val  = data.get(i);
           
             //elements to the left of pivot
+            stats.comparisons++;
             if(val.compareTo(pivot)<0) {
               small.add(val);
             //elements to the right of pivot  
@@ -64,15 +48,21 @@ public class QuickSort<T extends Comparable<T>> extends Sorter<T> {
             }
           }
         }
-        ArrayList<T> result = new ArrayList<T>();
+        
         ArrayList<T> smallPart = sort(stats,small);
         ArrayList<T> largePart = sort(stats,large);
-        result.clear();
-        result.addAll(smallPart);
-        result.add(pivot);
-        result.addAll(largePart);
         
-        return result;
+        data.clear();
+        //set up the sorted data list
+        for(T left : smallPart) {
+          data.add(left);
+        }
+        data.add(pivot);
+        for(T right : largePart ) {
+          data.add(right);
+        }
+        
+        return data;
       }
       
     }
