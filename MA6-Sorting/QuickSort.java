@@ -47,9 +47,12 @@ public class QuickSort<T extends Comparable<T>> extends Sorter<T> {
   					}
   				}
   			}
-  			
-  			small = sort(stats,small);
-  			large = sort(stats,large);
+  			if(small.size()>1) {
+  				small = sort(stats,small);
+  			}
+  			if(large.size()>1) {
+  				large = sort(stats,large);
+  			}
   			
   			data.clear();
   			//set up the sorted data list
