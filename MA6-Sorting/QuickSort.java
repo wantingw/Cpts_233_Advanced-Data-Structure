@@ -39,29 +39,30 @@ public class QuickSort<T extends Comparable<T>> extends Sorter<T> {
   					}else {
   						//elements with the identical value of pivot
   						//stay at its same side.
-  						if(i>0) {
-  							large.add(val);
-  						}else {
+  						if(i<mid) {
   							small.add(val);
+  						}else {
+  							large.add(val);
+  							 
   						}
   					}
   				}
   			}
-  			if(small.size()>1) {
-  				small = sort(stats,small);
-  			}
-  			if(large.size()>1) {
-  				large = sort(stats,large);
-  			}
+  			
+  			ArrayList<T> smallsub = sort(stats,small);
+  			
+  			
+  			ArrayList<T> largesub = sort(stats,large);
+  			
   			
   			data.clear();
   			//set up the sorted data list
-  			for(T left : small) {
+  			for(T left : smallsub) {
   				data.add(left);
   			}
   			data.add(pivot);
   			
-  			for(T right : large ) {
+  			for(T right : largesub ) {
   				data.add(right);
   			}
   			
