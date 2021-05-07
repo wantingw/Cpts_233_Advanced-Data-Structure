@@ -1,4 +1,5 @@
-*  Assignment: Comparing String Duplicate Algorithms
+/*
+ *  Assignment: Comparing String Duplicate Algorithms
  *
  *  BruteForceDupDetector: An N^2 "Biggest Hammer" approach to duplicate detection
  *   Duplicates Detector / Filter
@@ -40,14 +41,14 @@ class HashMapDupDetector extends StringDupDetectorBase {
         
         //traverse through the strings list
         for(int i = 0; i<strings.size(); i++) {
-        	//wanted to make sure items in map that has been existed && duplicate list doesn't have the 
-        	//repeated item: we add the new duplicated item to the duplicate list
-        	if(map.containsValue(strings.get(i)) && !duplicates.contains(strings.get(i))) {
-        		duplicates.add(strings.get(i));
-        	}else {
-        		//else we add the item to the map first, and keep going in the for loop for detection.
-        		map.put(strings.get(i), strings.get(i));
-        	}
+            //wanted to make sure items in map that has been existed && duplicate list doesn't have the 
+            //repeated item: we add the new duplicated item to the duplicate list
+            if(map.containsKey(strings.get(i))&& !duplicates.contains(strings.get(i))) {
+                duplicates.add(strings.get(i));
+            }
+            //transfer items to the map
+            map.put(strings.get(i), null);
+            
         }
 
         return duplicates;
